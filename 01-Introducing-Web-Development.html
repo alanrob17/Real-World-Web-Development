@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Northwind-Azure-Sql-Edge.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="building-an-entity-model-for-northwind-database">Building an Entity Model for Northwind database</h1>
+<p>We will define an EF Core entity data model for a Northwind database stored in SQL Server.</p>
+<h2 id="northwind4azuresqledgedockersql-script">Northwind4AzureSqlEdgeDocker.sql script</h2>
+<p>We will use SQL Server on a local computer in Docker. This script creates the Northwind database. It does not drop it if it already exists because the Docker container should be empty anyway as a fresh one will be spun up each time.</p>
+<h2 id="azure-sql-edge-in-a-local-docker-container">Azure SQL Edge in a local Docker container</h2>
+<p>Network address</p>
+<pre class="hljs"><code><div>    tcp:127.0.0.1,11433
+</div></code></pre>
+<p><strong>Note:</strong> I added an extra <strong>1</strong> to the port number so that the instance of Sql Server doesn't conflict with my local instance of Sql Server.</p>
+<h3 id="encrypting-communication">Encrypting communication</h3>
+<p>If you get the error, <em>The certificate chain was issued by an authority that is not trusted</em>., then it is because the connection to the SQL Server database is trying to encrypt the transmission using the local development server certificate but the OS and therefore the app does not (yet) trust it.</p>
+<p>You have three choices to fix this issue:</p>
+<p>Add the following to the database connection string to make the local development server certificate trusted for this connection:</p>
+<pre class="hljs"><code><div>    TrustServerCertificate=<span class="hljs-literal">true</span>;
+</div></code></pre>
+<p>Add the following to the database connection string to disable encryption so it does not need to trust the certificate for this connection:</p>
+<pre class="hljs"><code><div>    Encrypt=<span class="hljs-literal">false</span>;
+</div></code></pre>
+<p>Run the following at the command prompt to trust the certificate for all .NET apps in future:</p>
+<pre class="hljs"><code><div>    dotnet dev-certs https --trust
+</div></code></pre>
+<h3 id="setting-up-sql-server-to-run-in-tcpip">Setting up Sql Server to run in TCP/IP</h3>
+<p>In Sql Server configuration Manager select <strong>Protocols for MSSQLSERVER</strong>.</p>
+<p>Double-click <code>TCP/IP</code>, and in the <code>TCP/IP</code> Properties dialog box, set <code>Enabled</code> to <strong>true</strong> and click OK.</p>
+<h2 id="installing-docker-and-the-azure-sql-edge-container-image">Installing Docker and the Azure SQL Edge container image</h2>
+<p>You can install Docker on any operating system and use a container that has <strong>Azure SQL Edge</strong>, a cross-platform minimal featured version of SQL Server that only includes the database engine.</p>
+<p>The Docker image we will use has Azure SQL Edge based on Ubuntu 18.4. It is supported with the Docker Engine 1.8 or later. Azure SQL Edge requires a 64-bit processor (either x64 or ARM64), with a minimum of one processor and 1 GB RAM on the host:</p>
+<p>At the command prompt or terminal, pull down the latest container image for Azure SQL Edge, as shown in the following command:</p>
+<pre class="hljs"><code><div>    docker pull mcr.microsoft.com/azure-sql-edge:latest
+</div></code></pre>
+<h3 id="run-the-azure-sql-edge-container-image">Run the Azure SQL Edge container image</h3>
+<p>Now we can run the image:</p>
+<p>At the command prompt or terminal, run the container image for Azure SQL Edge with a strong password and name the container azuresqledge, as shown in the following command:</p>
+<pre class="hljs"><code><div>docker run --<span class="hljs-built_in">cap</span>-add SYS_PTRACE -e <span class="hljs-string">'ACCEPT_EULA=1'</span> -e <span class="hljs-string">'MSSQL_SA_PASSWORD=mypassword123'</span> -p 11433:1433 --name azuresqledge -d mcr.microsoft.com/azure-sql-edge
+</div></code></pre>
+<h3 id="connecting-to-azure-sql-edge-in-a-docker-container">Connecting to Azure SQL Edge in a Docker container</h3>
+<p>Use your preferred database tool to connect to Azure SQL Edge in the Docker container. Some common database tools are shown in the following list:</p>
+<p><strong>Windows only:</strong></p>
+<p><strong>SQL Server Management Studio (SSMS)</strong>: The most popular and comprehensive tool for managing SQL Server databases. Free to download from Microsoft.</p>
+<p><strong>SQL Server Data Tools (SSDT)</strong>: Integrated into Visual Studio and free to use, SSDT provides database development tools for designing, deploying, and managing SQL Server databases.</p>
+<p>Cross-platform for Windows, macOS, Linux:</p>
+<p><strong>VS Code's MS SQL extension</strong>: Query execution, IntelliSense, database browsing, and connection to SQL Server databases.</p>
+<p><strong>Azure Data Studio</strong>: A cross-platform database management tool focused on query editing, data insights, and lightweight management.</p>
+<h3 id="some-notes-about-the-database-connection-string-for-sql-edge">Some notes about the database connection string for SQL Edge</h3>
+<p><strong>Data Source</strong>, a.k.a. server: tcp:127.0.0.1,11433</p>
+<p>You must use <strong>SQL Server Authentication</strong>, a.k.a. <strong>SQL Login</strong>. That is, you must supply a username and password. Azure SQL Edge image has the sa user already created and you had to give it a strong password when you ran the container. We chose the password s3cret-Ninja.</p>
+<p>You must select the <strong>Trust Server Certificate</strong> check box.</p>
+<p><strong>Initial Catalog</strong>, a.k.a. database: master or leave blank.</p>
+<h2 id="connection-to-visual-studio">Connection to Visual Studio</h2>
+<p>From the <strong>Server Explorer</strong> tab on the left-hand side of Visual Studio we can create a database connection.</p>
+<p><img src="assets/images/connection-dialog.jpg" alt="Creating a connection" title="Creating a connection"></p>
+<h2 id="creating-the-northwind-database-using-a-sql-script">Creating the Northwind database using a SQL script</h2>
+<p>Now you can use your preferred code editor (or database tool) to execute the SQL script to create the Northwind database in SQL Edge:</p>
+<p>Open the Northwind4AzureSQLEdgeDocker.sql file.</p>
+<p>Execute the SQL script:</p>
+<p>If you are using Visual Studio, right-click in the script, then select Execute, and then wait to see the Command completed successfully message.</p>
+<p>If you are using VS Code, right-click in the script, select Execute Query, select the Azure SQL Edge in Docker connection profile, and then wait to see the Commands completed successfully messages.</p>
+<p>Refresh the database tab and you should be able to see the database in your Sql Server instance.</p>
+<p><strong>Note:</strong> the data is added to your container. If you stop the container it won't be available. You can restart your container to get access to the Northwind database. If you remove the container you will loose the data in the container so then you will have to reinstall the database in a new container.</p>
+<h2 id="creating-a-docker-composeyml-file">Creating a docker-compose.yml file</h2>
+<p>Running the container from above is a bit tedious so I have created a <code>docker-compose.yml</code> file.</p>
+<pre class="hljs"><code><div>    docker compose --build
+</div></code></pre>
+<p>Then.</p>
+<pre class="hljs"><code><div>    docker compose up
+</div></code></pre>
+<h2 id="central-package-management">Central Package Management</h2>
+<p>By default, with the .NET SDK CLI and most code editor-created projects, if you need to reference a <code>NuGet</code> package, you add the reference to the package name and version directly in the project file.</p>
+<p><strong>Central Package Management (CPM)</strong> is a feature that simplifies the management of NuGet package versions across multiple projects within a solution. This is particularly useful for large solutions with many projects, where managing package versions individually can become cumbersome and error-prone.</p>
+<p>The key features and benefits of CPM include:</p>
+<ol>
+<li><strong>Centralised Control</strong>: CPM allows you to define package versions in a single file, typically Directory.Packages.props, which is placed in the root directory of your solution. This file centralises the version information for all NuGet packages used across the projects in your solution.</li>
+<li><strong>Consistency</strong>: Ensures consistent package versions across multiple projects. By having a single source of truth for package versions, it eliminates discrepancies that can occur when different projects specify different versions of the same package.</li>
+<li><strong>Simplified Updates</strong>: Updating a package version in a large solution becomes straightforward. You update the version in the central file, and all projects referencing that package automatically use the updated version. This significantly reduces the maintenance overhead.</li>
+<li><strong>Reduced Redundancy</strong>: Removes the need to specify package versions in individual project files (.csproj). This makes project files cleaner and easier to manage, as they no longer contain repetitive version information.</li>
+</ol>
+<p><strong>Note:</strong> create the following file structure.</p>
+<blockquote>
+<p>web-dev-net9</p>
+</blockquote>
+<p>Under this.</p>
+<blockquote>
+<p>MatureWeb</p>
+</blockquote>
+<p>In this folder create the file <code>Directory.Packages.props</code>.</p>
+<p>See the completed file in <strong>\Project-Examples\asp.net\web-dev-net9\MatureWeb</strong>.</p>
+<p><strong>Warning!</strong> The <code>&lt;ManagePackageVersionsCentrally&gt;</code> element and its true value must go all on <strong>one line</strong>. Also, you cannot use floating wildcard version numbers like 9.0-* as you can in an individual project. Wildcards are useful to automatically get the latest patch version, for example, monthly package updates on Patch Tuesday. But with CPM you must
+manually update the versions.</p>
+<p>For any projects that we add underneath the folder containing this file, we can reference the packages without explicitly specifying the version, as shown in the following markup:</p>
+<pre class="hljs"><code><div>&lt;ItemGroup&gt;
+    &lt;PackageReference Include=<span class="hljs-string">"Microsoft.EntityFrameworkCore.SqlServer"</span> /&gt;
+    &lt;PackageReference Include=<span class="hljs-string">"Microsoft.EntityFrameworkCore.Design"</span> /&gt;
+&lt;/ItemGroup&gt;
+</div></code></pre>
+<p><strong>Note:</strong> you should regularly review and update the package versions in the Directory.Packages.props file to ensure that you are using the latest stable releases with important bug fixes and performance improvements.</p>
+<h2 id="setting-up-the-ef-core-cli-tool">Setting up the EF Core CLI tool</h2>
+<p>The .NET CLI tool named dotnet can be extended with capabilities useful for working with EF Core. It can perform design-time tasks like creating and applying migrations from an older model to a newer model and generating code for a model from an existing database.</p>
+<p>The <strong>dotnet-ef command-line tool</strong> is not automatically installed. You must install this package as either a global or local tool. If you have already installed an older version of the tool, then you should update it to the latest version:</p>
+<p>First, list what you have installed with.</p>
+<pre class="hljs"><code><div>    dotnet tool list --global
+</div></code></pre>
+<p>If it isn't installed then.</p>
+<pre class="hljs"><code><div>    dotnet tool install --global dotnet-ef
+</div></code></pre>
+<p>If it is installed then do an upgrade.</p>
+<pre class="hljs"><code><div>    dotnet tool update --global dotnet-ef
+</div></code></pre>
+<p>If necessary, follow any OS-specific instructions to add the dotnet tools directory to your PATH environment variable, as described in the output of installing the dotnet-ef tool. On my PC.</p>
+<blockquote>
+<p>C:\Program Files\dotnet</p>
+</blockquote>
+<h2 id="creating-a-class-library-for-entity-models">Creating a class library for entity models</h2>
+<p>You will now define entity data models in a class library so that they can be reused in other types of projects, including client-side app models.</p>
+<p><strong>Good Practice</strong>: You should create a separate class library project for your entity data models from the class library for your data context. This allows easier sharing of the entity models between backend web servers and frontend desktop, mobile, and Blazor clients, while only the backend needs to reference the data context class library.</p>
+<p>We will automatically generate some entity models using the EF Core command-line tool:</p>
+<p>Use your preferred code editor to create a new project and solution, as defined in the following list:</p>
+<p><strong>Project template</strong>: Class Library / classlib</p>
+<p><strong>Project file and folder</strong>: Northwind.EntityModels</p>
+<p><strong>Solution file and folder</strong>: MatureWeb</p>
+<p>You can target either .NET 8 (LTS) or .NET 9 (STS) for all the projects in this book but you should be consistent. If you choose .NET 9 for the class libraries, then choose .NET 9 for later MVC and Web API projects.</p>
+<p>Install these packages.</p>
+<pre class="hljs"><code><div>    Install-Package Microsoft.EntityFrameworkCore.SqlServer
+</div></code></pre>
+<p>and</p>
+<pre class="hljs"><code><div>    Install-Package Microsoft.EntityFrameworkCore.Design
+</div></code></pre>
+<p>You will now define entity data models in a class library so that they can be reused in other types of projects, including client-side app models.</p>
+<p>Make sure that the SQL Edge container is running because you are about to connect to the server and its Northwind database.</p>
+<p>At a command prompt or terminal, in the Northwind.EntityModels project folder (the folder that contains the .csproj project file), generate entity class models for all tables, as shown in the following command:</p>
+<pre class="hljs"><code><div>dotnet ef dbcontext scaffold <span class="hljs-string">"Data Source=tcp:127.0.0.1,11433;Initial Catalog=Northwind;User Id=sa;Password=s3cret-Ninja;TrustServerCertificate=true;"</span> Microsoft.EntityFrameworkCore.SqlServer --namespace Northwind.EntityModels --data-annotations
+</div></code></pre>
+<p>You should now see your Entity models in the <code>Northwind.EntityModels</code> library.</p>
+<p><strong>Note:</strong> I will use this in future to get a set of Entity Models for an existing database.</p>
+<h2 id="creating-a-class-library-for-a-database-context">Creating a class library for a database context</h2>
+<p>You will now define a database context class library:</p>
+<ol>
+<li>Add a new project to the solution, as defined in the following list:</li>
+</ol>
+<p><strong>Project template</strong>: Class Library /classlib</p>
+<p><strong>Project file and folder</strong>: Northwind.DataContext</p>
+<p><strong>Solution file and folder</strong>: MatureWeb</p>
+<p>In the <strong>Northwind.DataContext</strong> project, statically and globally import the Console class, add a package reference to the EF Core data provider for SQL Server, and add a project reference to the Northwind.EntityModels project, as shown in the following markup:</p>
+<p>Install packages.</p>
+<pre class="hljs"><code><div>    Install-Package Microsoft.EntityFrameworkCore.SqlServer
+</div></code></pre>
+<p>Another way to install the package is to manually build the <code>.csproj</code> file yourself. For example I could have done this.</p>
+<pre class="hljs"><code><div>&lt;Project Sdk=<span class="hljs-string">"Microsoft.NET.Sdk"</span>&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;net9.0&lt;/TargetFramework&gt;
+    &lt;ImplicitUsings&gt;<span class="hljs-built_in">enable</span>&lt;/ImplicitUsings&gt;
+    &lt;Nullable&gt;<span class="hljs-built_in">enable</span>&lt;/Nullable&gt;
+  &lt;/PropertyGroup&gt;
+    &lt;ItemGroup Label=<span class="hljs-string">"To simplify use of WriteLine."</span>&gt;
+    	&lt;Using Include=<span class="hljs-string">"System.Console"</span> Static=<span class="hljs-string">"true"</span> /&gt;
+    &lt;/ItemGroup&gt;
+    &lt;ItemGroup&gt;
+      &lt;PackageReference Include=<span class="hljs-string">"Microsoft.EntityFrameworkCore.SqlServer"</span> Version=<span class="hljs-string">"9.0.0"</span> /&gt;
+    &lt;/ItemGroup&gt;
+	&lt;ItemGroup&gt;
+	&lt;ProjectReference Include=<span class="hljs-string">"..\Northwind.EntityModels\Northwind.EntityModels.csproj"</span> /&gt;
+	&lt;/ItemGroup&gt;
+&lt;/Project&gt;
+</div></code></pre>
+<p>I would then build the project and it would install the SqlServer packages and added the project reference.</p>
+<p>In the Northwind.DataContext project, add a class named <code>NorthwindContextLogger.cs</code>.</p>
+<p>Modify its contents to define a static method named <code>WriteLine</code> that appends a string to the end of a text file named <code>northwindlog-&lt;date_time&gt;.txt</code> on the desktop, as shown in the following code:</p>
+<pre class="hljs"><code><div>    public static void WriteLine(string message)
+    {
+        string folder = Path.Combine(GetFolderPath(SpecialFolder.DesktopDirectory), <span class="hljs-string">"book-logs"</span>);
+    
+        <span class="hljs-keyword">if</span> (!Directory.Exists(folder))
+        {
+            Directory.CreateDirectory(folder);
+        }
+    
+        string dateTimeStamp = DateTime.Now.ToString(<span class="hljs-string">"yyyyMMdd_HHmmss"</span>);
+        string path = Path.Combine(folder, $<span class="hljs-string">"northwindlog-{dateTimeStamp}.txt"</span>);
+        StreamWriter textFile = File.AppendText(path);
+        textFile.WriteLine(message);
+        textFile.Close();
+    }
+</div></code></pre>
+<p><strong>Important:</strong> now shift the <code>NorthwindContext.cs</code> from the <code>Northwind.EntityModels</code> project to the <code>Northwind.DataContext</code> project.</p>
+<p>In the <code>Northwind.DataContext</code> project, add a class named <code>NorthwindContextExtensions.cs</code>. Modify its contents to define an extension method that adds the Northwind database context to a collection of dependency services, as shown in the following code:</p>
+<pre class="hljs"><code><div>    public static  class NorthwindContextExtensions
+    {
+        /// &lt;summary&gt;
+        /// Adds NorthwindContext to the specified IServiceCollection. Uses the SqlServer database provider.
+        /// &lt;/summary&gt;
+        /// &lt;param name=<span class="hljs-string">"services"</span>&gt;The service collection.&lt;/param&gt;
+        /// &lt;param name=<span class="hljs-string">"connectionString"</span>&gt;Set to override the default.&lt;/param&gt;
+        /// &lt;returns&gt;An IServiceCollection that can be used to add more services.&lt;/returns&gt;
+        public static IServiceCollection AddNorthwindContext(this IServiceCollection services, string? connectionString = null)
+        {
+            <span class="hljs-keyword">if</span> (connectionString is null)
+            {
+                SqlConnectionStringBuilder builder = new();
+                builder.DataSource = <span class="hljs-string">"tcp:127.0.0.1,1433"</span>; // SQL Edge <span class="hljs-keyword">in</span> Docker.
+                builder.InitialCatalog = <span class="hljs-string">"Northwind"</span>;
+                builder.TrustServerCertificate = <span class="hljs-literal">true</span>;
+                builder.MultipleActiveResultSets = <span class="hljs-literal">true</span>;
+                // Because we want to fail faster. Default is 15 seconds.
+                builder.ConnectTimeout = 3;
+
+                // SQL Server authentication.
+                builder.UserID = Environment.GetEnvironmentVariable(<span class="hljs-string">"MY_SQL_USR"</span>);
+                builder.Password = Environment.GetEnvironmentVariable(<span class="hljs-string">"MY_SQL_PWD"</span>);
+                connectionString = builder.ConnectionString;
+            }
+
+            services.AddDbContext&lt;NorthwindContext&gt;(options =&gt;
+            {
+                options.UseSqlServer(connectionString);
+                options.LogTo(NorthwindContextLogger.WriteLine,
+                new[] { Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.CommandExecuting });
+            },
+
+            // Register with a transient lifetime to avoid concurrency
+            // issues with Blazor Server projects.
+            contextLifetime: ServiceLifetime.Transient,
+            optionsLifetime: ServiceLifetime.Transient);
+
+            <span class="hljs-built_in">return</span> services;
+        }
+    }
+</div></code></pre>
+<h2 id="setting-the-user-and-password-for-sql-server-authentication">Setting the user and password for SQL Server authentication</h2>
+<p>If you are using SQL Server authentication, i.e., you must supply a user and password, then complete the following steps:</p>
+<p>In the Northwind.DataContext project, note the statements that set UserId and Password, as shown in the following code:</p>
+<pre class="hljs"><code><div>    // SQL Server authentication.
+    builder.UserId = Environment.GetEnvironmentVariable(<span class="hljs-string">"MY_SQL_USR"</span>);
+    builder.Password = Environment.GetEnvironmentVariable(<span class="hljs-string">"MY_SQL_PWD"</span>);.
+</div></code></pre>
+<p>Set the two environment variables at the command prompt or terminal, as shown in the following commands:</p>
+<p><strong>On Windows:</strong></p>
+<pre class="hljs"><code><div>    setx MY_SQL_USR sa
+    setx MY_SQL_PWD s3cret-Ninja
+</div></code></pre>
+<p><strong>On macOS and Linux:</strong></p>
+<pre class="hljs"><code><div>    <span class="hljs-built_in">export</span> MY_SQL_USR=sa
+    <span class="hljs-built_in">export</span> MY_SQL_PWD=s3cret-Ninja
+</div></code></pre>
+<p><strong>Note:</strong> You will need to restart any command prompts, terminal windows, and applications like Visual Studio for this change to take effect.</p>
+<p><strong>Good Practice:</strong>  Although you could define the two environment variables in the <code>launchSettings.json</code> file of an ASP.NET Core project, you must then be extremely careful not to include that file in a GitHub repository! Add the <code>launchSettings.json</code> into your <code>.gitignore</code> file.</p>
+<h2 id="registering-dependency-services">Registering dependency services</h2>
+<p>You can register dependency services with different lifetimes, as shown in the following list:</p>
+<ul>
+<li><strong>Transient</strong>: These services are created each time they're requested. Transient services should be lightweight and stateless.</li>
+<li><strong>Scoped</strong>: These services are created once per client request and are disposed of, then the response returns to the client.</li>
+<li><strong>Singleton</strong>: These services are usually created the first time they are requested and then shared, although you can provide an instance at the time of registration too.</li>
+</ul>
+<p>Introduced in .NET 8 is the ability to set a key for a dependency service. This allows multiple services to be registered with different keys and then retrieved later using that key:</p>
+<pre class="hljs"><code><div>    builder.Services.AddKeyedsingleton&lt;IMemoryCache, BigCache&gt;(<span class="hljs-string">"big"</span>);
+    builder.Services.AddKeyedSingleton&lt;IMemoryCache, SmallCache&gt;(<span class="hljs-string">"small"</span>);
+    class BigCacheConsumer([FromKeyedServices(<span class="hljs-string">"big"</span>)] IMemoryCache cache)
+    {
+        public object? GetData() =&gt; cache.Get(<span class="hljs-string">"data"</span>);
+    }
+    class SmallCacheConsumer(IKeyedServiceProvider keyedServiceProvider)
+    {
+        public object? GetData() =&gt; keyedServiceProvider.GetRequiredKeyedService&lt;IMemoryCache&gt;(<span class="hljs-string">"small"</span>);
+    }
+</div></code></pre>
+<p>You will use all three types of lifetime but we will not need to use keyed services.</p>
+<p>By default, a DbContext class is registered using the Scope lifetime, meaning that multiple threads can share the same instance. But DbContext does not support multiple threads. If more than one thread attempts to use the same NorthwindContext class instance at the same time, then you will see the following runtime exception thrown: A second operation started on this context before a previous operation completed. This is usually caused by different threads using the same instance of a DbContext. However, instance members are not guaranteed to be thread-safe.</p>
+<p>This happens in Blazor projects with components set to run on the server side because, whenever interactions on the client side happen, a SignalR call is made back to the server where a single instance of the database context is shared between multiple clients. This issue does not occur if a component is set to run on the client side.</p>
+<h2 id="improving-the-class-to-table-mapping">Improving the class-to-table mapping</h2>
+<p>We will make some small changes to improve the entity model mapping and validation rules for SQL Server.</p>
+<p>We will add a regular expression to validate that a CustomerId value is exactly five uppercase letters:</p>
+<ol>
+<li>In <code>Customer.cs</code>, add a regular expression to validate its primary key CustomerId to only allow uppercase Western characters, as shown highlighted in the following code:</li>
+</ol>
+<pre class="hljs"><code><div>    [Key]
+    [StringLength(5)]
+    [RegularExpression(<span class="hljs-string">"[A-Z]{5}"</span>)]
+    public string CustomerId { get; <span class="hljs-built_in">set</span>; } = null!;
+</div></code></pre>
+<ol start="2">
+<li>In <code>Customer.cs</code>, add the [<code>Phone</code>] attribute to its Phone property, as shown highlighted in the following code:</li>
+</ol>
+<pre class="hljs"><code><div>    [StringLength(24)]
+    [Phone]
+    public string? Phone { get; <span class="hljs-built_in">set</span>; }
+</div></code></pre>
+<p>The [<code>Phone</code>] attribute adds the following to the rendered HTML: type=&quot;tel&quot;. On a mobile phone, this makes the keyboard use the phone dialer instead of the normal keyboard.</p>
+<ol start="3">
+<li>In <code>Order.cs</code>, decorate the CustomerId property with the same regular expression to enforce five uppercase characters.</li>
+</ol>
+<h2 id="testing-the-class-libraries-using-xunit">Testing the class libraries using xUnit</h2>
+<p>let's build some unit tests to ensure the class libraries are working correctly.</p>
+<p>Let's write the tests:</p>
+<ol>
+<li>
+<p>Use your preferred coding tool to add a new <strong>xUnit Test Project [C#]</strong> / xunit project named <strong>Northwind.UnitTests</strong> to the MatureWeb solution.</p>
+</li>
+<li>
+<p>In the <strong>Northwind.UnitTests</strong> project, delete the version numbers specified for the testing packages in the project file. (Visual Studio and other code editors will give errors if you have projects that should use CPM but specify their own package versions without using the VersionOverride attribute.)</p>
+</li>
+<li></li>
+</ol>
+<p>In the Northwind.UnitTests project, add a project reference to the <code>Northwind.DataContext</code> project, as shown in the following configuration:</p>
+<pre class="hljs"><code><div>&lt;ItemGroup&gt;
+&lt;PackageReference Include=<span class="hljs-string">"coverlet.collector"</span> /&gt;
+&lt;PackageReference Include=<span class="hljs-string">"Microsoft.NET.Test.Sdk"</span> /&gt;
+&lt;PackageReference Include=<span class="hljs-string">"xunit"</span> /&gt;
+&lt;PackageReference Include=<span class="hljs-string">"xunit.runner.visualstudio"</span> /&gt;
+&lt;/ItemGroup&gt;
+&lt;ItemGroup&gt;
+&lt;ProjectReference Include=<span class="hljs-string">"..\Northwind.DataContext\Northwind.DataContext.csproj"</span> /&gt;
+&lt;/ItemGroup&gt;
+</div></code></pre>
+<ol start="4">
+<li>
+<p>Build the <code>Northwind.UnitTests</code> project to build referenced projects.</p>
+</li>
+<li>
+<p>Rename <code>UnitTest1.cs</code> to <code>EntityModelTests.cs</code>.</p>
+</li>
+<li>
+<p>Modify the contents of the file to define two tests, the first to connect to the database and the second to confirm there are eight categories in the database, as shown in the following code:</p>
+</li>
+</ol>
+<pre class="hljs"><code><div>    public class EntityModelTests
+    {
+        [Fact]
+        public void <span class="hljs-function"><span class="hljs-title">DatabaseConnectTest</span></span>()
+        {
+            using NorthwindContext db = new();
+            Assert.True(db.Database.CanConnect());
+        }
+
+        [Fact]
+        public void <span class="hljs-function"><span class="hljs-title">CategoryCountTest</span></span>()
+        {
+            using NorthwindContext db = new();
+            int expected = 8;
+            int actual = db.Categories.Count();
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void <span class="hljs-function"><span class="hljs-title">ProductId1IsChaiTest</span></span>()
+        {
+            using NorthwindContext db = new();
+            string expected = <span class="hljs-string">"Chai"</span>;
+            Product? product = db.Products.Find(keyValues: 1);
+            string actual = product?.ProductName ?? string.Empty;
+            Assert.Equal(expected, actual);
+        }
+    }
+</div></code></pre>
+<ol start="7">
+<li>Run the unit tests:</li>
+</ol>
+<p>If you are using Visual Studio, then navigate to <strong>Test | Run All Tests</strong>, and then view the results in <strong>Test Explorer</strong>.</p>
+<p>If you are using VS Code, then in the <code>Northwind.UnitTests</code> project's TERMINAL window, run the tests, as shown in the following command: <strong>dotnet test</strong>. Alternatively, use the TESTING window if you have installed C# Dev Kit.</p>
+<ol start="8">
+<li>Note that the results should indicate that three tests ran, and all passed.</li>
+</ol>
+
+</body>
+</html>
