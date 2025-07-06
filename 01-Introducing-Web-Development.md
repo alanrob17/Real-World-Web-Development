@@ -1,8 +1,10 @@
-# Building an Entity Model for Northwind database
+# Introducing Web Development Using Controllers
+
+## Building an Entity Model for Northwind database
 
 We will define an EF Core entity data model for a Northwind database stored in SQL Server.
 
-## Northwind4AzureSqlEdgeDocker.sql script
+### Northwind4AzureSqlEdgeDocker.sql script
 
 We will use SQL Server on a local computer in Docker. This script creates the Northwind database. It does not drop it if it already exists because the Docker container should be empty anyway as a fresh one will be spun up each time. 
 

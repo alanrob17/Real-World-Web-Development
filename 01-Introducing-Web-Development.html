@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Northwind-Azure-Sql-Edge.md</title>
+<title>01-Introducing-Web-Development.md</title>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
 <style>
@@ -365,9 +365,10 @@ code {
           : 'default'
     });
   </script>
-<h1 id="building-an-entity-model-for-northwind-database">Building an Entity Model for Northwind database</h1>
+<h1 id="introducing-web-development-using-controllers">Introducing Web Development Using Controllers</h1>
+<h2 id="building-an-entity-model-for-northwind-database">Building an Entity Model for Northwind database</h2>
 <p>We will define an EF Core entity data model for a Northwind database stored in SQL Server.</p>
-<h2 id="northwind4azuresqledgedockersql-script">Northwind4AzureSqlEdgeDocker.sql script</h2>
+<h3 id="northwind4azuresqledgedockersql-script">Northwind4AzureSqlEdgeDocker.sql script</h3>
 <p>We will use SQL Server on a local computer in Docker. This script creates the Northwind database. It does not drop it if it already exists because the Docker container should be empty anyway as a fresh one will be spun up each time.</p>
 <h2 id="azure-sql-edge-in-a-local-docker-container">Azure SQL Edge in a local Docker container</h2>
 <p>Network address</p>
@@ -410,7 +411,7 @@ code {
 <p><strong>Azure Data Studio</strong>: A cross-platform database management tool focused on query editing, data insights, and lightweight management.</p>
 <h3 id="some-notes-about-the-database-connection-string-for-sql-edge">Some notes about the database connection string for SQL Edge</h3>
 <p><strong>Data Source</strong>, a.k.a. server: tcp:127.0.0.1,11433</p>
-<p>You must use <strong>SQL Server Authentication</strong>, a.k.a. <strong>SQL Login</strong>. That is, you must supply a username and password. Azure SQL Edge image has the sa user already created and you had to give it a strong password when you ran the container. We chose the password s3cret-Ninja.</p>
+<p>You must use <strong>SQL Server Authentication</strong>, a.k.a. <strong>SQL Login</strong>. That is, you must supply a username and password. Azure SQL Edge image has the sa user already created and you had to give it a strong password when you ran the container.</p>
 <p>You must select the <strong>Trust Server Certificate</strong> check box.</p>
 <p><strong>Initial Catalog</strong>, a.k.a. database: master or leave blank.</p>
 <h2 id="connection-to-visual-studio">Connection to Visual Studio</h2>
@@ -484,17 +485,24 @@ manually update the versions.</p>
 <p><strong>Project template</strong>: Class Library / classlib</p>
 <p><strong>Project file and folder</strong>: Northwind.EntityModels</p>
 <p><strong>Solution file and folder</strong>: MatureWeb</p>
-<p>You can target either .NET 8 (LTS) or .NET 9 (STS) for all the projects in this book but you should be consistent. If you choose .NET 9 for the class libraries, then choose .NET 9 for later MVC and Web API projects.</p>
-<p>Install these packages.</p>
-<pre class="hljs"><code><div>    Install-Package Microsoft.EntityFrameworkCore.SqlServer
+<p>Install these packages by adding the following into your <code>.csproj</code> file.</p>
+<pre class="hljs"><code><div>&lt;ItemGroup&gt;
+	&lt;PackageReference Include=<span class="hljs-string">"Microsoft.EntityFrameworkCore.SqlServer"</span> /&gt;
+	&lt;PackageReference Include=<span class="hljs-string">"Microsoft.EntityFrameworkCore.Design"</span>&gt;
+		&lt;PrivateAssets&gt;all&lt;/PrivateAssets&gt;
+		&lt;IncludeAssets&gt;
+			runtime; build; native; contentfiles; analyzers;
+			buildtransitive
+		&lt;/IncludeAssets&gt;
+	&lt;/PackageReference&gt;
+&lt;/ItemGroup&gt;
 </div></code></pre>
-<p>and</p>
-<pre class="hljs"><code><div>    Install-Package Microsoft.EntityFrameworkCore.Design
-</div></code></pre>
+<p><strong>Note:</strong> as we said before don't add version numbers to the packages as they are selected in <code>Directory.Packages.props</code>.</p>
+<p>Build the project to restore the packages.</p>
 <p>You will now define entity data models in a class library so that they can be reused in other types of projects, including client-side app models.</p>
-<p>Make sure that the SQL Edge container is running because you are about to connect to the server and its Northwind database.</p>
+<p><strong>Note:</strong> make sure that the SQL Edge container is running because you are about to connect to the server and its Northwind database.</p>
 <p>At a command prompt or terminal, in the Northwind.EntityModels project folder (the folder that contains the .csproj project file), generate entity class models for all tables, as shown in the following command:</p>
-<pre class="hljs"><code><div>dotnet ef dbcontext scaffold <span class="hljs-string">"Data Source=tcp:127.0.0.1,11433;Initial Catalog=Northwind;User Id=sa;Password=s3cret-Ninja;TrustServerCertificate=true;"</span> Microsoft.EntityFrameworkCore.SqlServer --namespace Northwind.EntityModels --data-annotations
+<pre class="hljs"><code><div>dotnet ef dbcontext scaffold <span class="hljs-string">"Data Source=tcp:127.0.0.1,11433;Initial Catalog=Northwind;User Id=sa;Password=yourpassword;TrustServerCertificate=true;"</span> Microsoft.EntityFrameworkCore.SqlServer --namespace Northwind.EntityModels --data-annotations
 </div></code></pre>
 <p>You should now see your Entity models in the <code>Northwind.EntityModels</code> library.</p>
 <p><strong>Note:</strong> I will use this in future to get a set of Entity Models for an existing database.</p>
@@ -507,7 +515,6 @@ manually update the versions.</p>
 <p><strong>Project file and folder</strong>: Northwind.DataContext</p>
 <p><strong>Solution file and folder</strong>: MatureWeb</p>
 <p>In the <strong>Northwind.DataContext</strong> project, statically and globally import the Console class, add a package reference to the EF Core data provider for SQL Server, and add a project reference to the Northwind.EntityModels project, as shown in the following markup:</p>
-<p>Install packages.</p>
 <pre class="hljs"><code><div>    Install-Package Microsoft.EntityFrameworkCore.SqlServer
 </div></code></pre>
 <p>Another way to install the package is to manually build the <code>.csproj</code> file yourself. For example I could have done this.</p>
@@ -534,7 +541,7 @@ manually update the versions.</p>
 <p>Modify its contents to define a static method named <code>WriteLine</code> that appends a string to the end of a text file named <code>northwindlog-&lt;date_time&gt;.txt</code> on the desktop, as shown in the following code:</p>
 <pre class="hljs"><code><div>    public static void WriteLine(string message)
     {
-        string folder = Path.Combine(GetFolderPath(SpecialFolder.DesktopDirectory), <span class="hljs-string">"book-logs"</span>);
+        string folder = Path.Combine(GetFolderPath(SpecialFolder.MyDocuments), <span class="hljs-string">"book-logs"</span>);
     
         <span class="hljs-keyword">if</span> (!Directory.Exists(folder))
         {
@@ -602,13 +609,14 @@ manually update the versions.</p>
 <p>Set the two environment variables at the command prompt or terminal, as shown in the following commands:</p>
 <p><strong>On Windows:</strong></p>
 <pre class="hljs"><code><div>    setx MY_SQL_USR sa
-    setx MY_SQL_PWD s3cret-Ninja
+    setx MY_SQL_PWD mypassword123
 </div></code></pre>
 <p><strong>On macOS and Linux:</strong></p>
 <pre class="hljs"><code><div>    <span class="hljs-built_in">export</span> MY_SQL_USR=sa
-    <span class="hljs-built_in">export</span> MY_SQL_PWD=s3cret-Ninja
+    <span class="hljs-built_in">export</span> MY_SQL_PWD=mypassword123
 </div></code></pre>
-<p><strong>Note:</strong> You will need to restart any command prompts, terminal windows, and applications like Visual Studio for this change to take effect.</p>
+<p><strong>Important Note:</strong> You will need to restart any command prompts, terminal windows, and applications like Visual Studio for this change to take effect.</p>
+<p>I had an old password set for <code>MY_SQL_PWD</code> and if you run the command, <code>set</code> it will show you all your environment variables. The problem was I reset the variable and it was still showing the old password in the Terminal window and Visual Studio. Onve I closed bot of these applications and restarted them it showed the changed variable.</p>
 <p><strong>Good Practice:</strong>  Although you could define the two environment variables in the <code>launchSettings.json</code> file of an ASP.NET Core project, you must then be extremely careful not to include that file in a GitHub repository! Add the <code>launchSettings.json</code> into your <code>.gitignore</code> file.</p>
 <h2 id="registering-dependency-services">Registering dependency services</h2>
 <p>You can register dependency services with different lifetimes, as shown in the following list:</p>
