@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>02-Building-Websites-Using-ASP.NET-Core-MVC.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="building-websites-using-aspnet-core-mvc">Building Websites Using ASP.NET Core MVC</h1>
+<h2 id="setting-up-an-aspnet-core-mvc-website">Setting up an ASP.NET Core MVC website</h2>
+<p>The MVC design pattern is useful for complex websites, where a formal structure is needed to manage that complexity. ASP.NET Core MVC uses technologies like Razor syntax, but allows a cleaner separation of responsibilities, sometimes called technical concerns, as shown in the following list:</p>
+<ul>
+<li><strong>Models</strong>: Classes that represent the data entities and view models used on the website.</li>
+<li><strong>Views</strong>: Razor Views are .cshtml files that render data in view models into HTML for a dynamically-generated web page.</li>
+<li><strong>Controllers</strong>: Classes that execute code when an HTTP request arrives at the web server. The controller methods usually instantiate a view model and pass that to a view in order to generate an HTTP response. This is returned to the web browser or other client that made the original request.</li>
+</ul>
+<p><strong>Warning:</strong> When creating a Razor Views, you must not use the <code>@page</code> directive at the top of the file! If you do, then you have created a Razor Page and this behaves differently. For example, the controller will not pass the model and it will be null, throwing a <code>NullReferenceException</code> when you try to access any of its members.</p>
+<p>Let’s review a simplified diagram to understand how these components work together to process an incoming HTTP <code>request</code> and send back an outgoing HTTP <code>response</code>.</p>
+<p><img src="assets/images/mvc-pattern.jpg" alt="How the MVC pattern works" title="How the MVC pattern works"></p>
+<p>The HTTP request is processed in the following four steps:</p>
+<p><strong>Route:</strong> In Program.cs, there is a block of statements that configures the HTTP pipeline. A default route is configured so that if no relative path is specified, it assumes a controller name of <strong>Home</strong> (with a class name of <code>HomeController</code>) and an action method name of <code>Index</code>. If a relative path is specified, for example, <code>/Products/Detail/3</code>, then the controller name would be <strong>Products</strong> (with a class name of <code>ProductsController</code>), an action method name of <code>Details</code>, and an <code>id</code> parameter value of 3.</p>
+<p><strong>Controller:</strong> In <code>&lt;controller&gt;Controller.cs</code>, the controller class is instantiated and the action method is called. If the method has parameters, they are set automatically from parameters in the <strong>HTTP request</strong>. These can come from the route path, query string, and any posted <code>&lt;form&gt;</code> element or uploaded file.</p>
+<p><strong>Model:</strong> The action method constructs an instance of the appropriate model and passes it to a view. The controller returns the rendered view to the HTTP pipeline as a response including a status code like <code>200 OK</code> or <code>400 Bad Request</code>.</p>
+<p><strong>View:</strong> The appropriate view renders the model into a response format, typically HTML, but could be anything, like an image, PDF, JSON, or XML.</p>
+<p><strong>Info:</strong> The MVC design pattern as implemented in ASP.NET Core MVC might have been better named <strong>Route-Controller-Model-View</strong> (RCMV) to match the order of the components that are used in the process. But MVC sounds better.</p>
+<p>The best way to understand using the MVC design pattern is to see a working example.</p>
+<h2 id="creating-an-aspnet-core-mvc-website">Creating an ASP.NET Core MVC website</h2>
+<p>You will use a project template to create an ASP.NET Core MVC website project that has a database for authenticating and authorizing users using individual accounts. A visitor to the website can register their email, set a password, and then log in to the website using those credentials.</p>
+<p>Visual Studio defaults to using SQL Server LocalDB for the accounts database. VS Code (or more accurately, the dotnet CLI tool) uses SQLite by default and you can specify a switch to use SQL Server LocalDB instead.</p>
+<p>Let’s see it in action:</p>
+<p>Use your preferred code editor to open the <strong>MatureWeb</strong> solution.</p>
+<p>Add an MVC website project with authentication accounts stored in a local database, as defined in the following list:</p>
+<p><strong>Project template:</strong> ASP.NET Core Web App (Model-View-Controller) [C#] / mvc</p>
+<p><strong>Project file and folder:</strong> Northwind.Mvc</p>
+<p><strong>Solution file and folder:</strong> MatureWeb</p>
+<p><strong>Framework:</strong> .NET 9.0</p>
+<p><strong>Authentication type:</strong> Individual Accounts / --auth Individual</p>
+<p><strong>Configure for HTTPS:</strong> Selected
+<em>Enable container support:</em> Cleared</p>
+<p>In the <code>Northwind.Mvc.csproj</code> project file, remove the <strong>Version attributes</strong> in <code>&lt;PackageReference&gt;</code> elements because they are set in the solution-level <code>Directory.Packages.props</code> file.</p>
+<p>Add an element to import the <code>System.Console</code> class globally and statically.</p>
+<p>If you are using Visual Studio, in Solution Explorer, toggle Show All Files.</p>
+<p>Expand the obj folder, expand the Debug folder, expand the net9.0 folder, select the <code>Northwind.Mvc.GlobalUsings.g.cs</code> file, and note how the implicitly imported namespaces include all the ones for a console app or class library, as well as some ASP.NET Core ones, such as <code>Microsoft.AspNetCore.Builder</code>, as shown in the following code:</p>
+<pre class="hljs"><code><div>// &lt;autogenerated /&gt;
+global using global::Microsoft.AspNetCore.Builder;
+global using global::Microsoft.AspNetCore.Hosting;
+global using global::Microsoft.AspNetCore.Http;
+global using global::Microsoft.AspNetCore.Routing;
+global using global::Microsoft.Extensions.Configuration;
+global using global::Microsoft.Extensions.DependencyInjection;
+global using global::Microsoft.Extensions.Hosting;
+global using global::Microsoft.Extensions.Logging;
+global using global::System;
+global using global::System.Collections.Generic;
+global using global::System.IO;
+global using global::System.Linq;
+global using global::System.Net.Http;
+global using global::System.Net.Http.Json;
+global using global::System.Threading;
+global using global::System.Threading.Tasks;
+global using static global::System.Console;
+</div></code></pre>
+<p>Build the Northwind.Mvc project.</p>
+<p>At the command prompt or terminal, use the help switch to see other options for this project template, as shown in the following command:</p>
+<pre class="hljs"><code><div>    dotnet new mvc --<span class="hljs-built_in">help</span>
+</div></code></pre>
+<p>Note the results, as shown in the following partial output:</p>
+<blockquote>
+<p>ASP.NET Core Web App (Model-View-Controller) (C#)<br>
+Author: Microsoft<br>
+Description: A project template for creating an ASP.NET Core application with example ASP.NET Core MVC Views and &gt; Controllers. This template can also be used for RESTful HTTP services.</p>
+</blockquote>
+<h3 id="creating-the-authentication-database-for-sql-server-localdb">Creating the authentication database for SQL Server LocalDB</h3>
+<p>If you created the MVC project using Visual Studio, or you used dotnet new mvc with the -uld or --use-local-db switch, then the database for authentication and authorization will be stored in SQL Server LocalDB. But the database itself does not exist yet.</p>
+<p>If you created the MVC project using dotnet new or Rider, then the database for authentication and authorization will be stored in SQLite and the file has already been created, named app.db.</p>
+<p>The connection string for the authentication database is named <code>DefaultConnection</code> and it is stored in the <code>appsettings.json</code> file in the root folder for the MVC website project.</p>
+<p>For SQLite, see the following setting:</p>
+<pre class="hljs"><code><div>    {
+        <span class="hljs-string">"ConnectionStrings"</span>: {
+            <span class="hljs-string">"DefaultConnection"</span>: <span class="hljs-string">"DataSource=app.db;Cache=Shared"</span>
+    },
+</div></code></pre>
+<p>If you created the MVC project using Visual Studio, then let’s create its authentication database now by following a few simple steps:</p>
+<p>In the <code>Northwind.Mvc</code> project, in <code>appsettings.json</code>, note the database connection string named <code>DefaultConnection</code>, as shown highlighted in the following configuration:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-string">"ConnectionStrings"</span>: {
+    <span class="hljs-string">"DefaultConnection"</span>: <span class="hljs-string">"Server=(localdb)\\mssqllocaldb;Database=aspnet-Northwind.Mvc-440bc3c1-f7e7-4463-99d5-896b6a6500e0;Trusted_Connection=True;MultipleActiveResultSets=true"</span>
+  },
+  <span class="hljs-string">"Logging"</span>: {
+    <span class="hljs-string">"LogLevel"</span>: {
+      <span class="hljs-string">"Default"</span>: <span class="hljs-string">"Information"</span>,
+      <span class="hljs-string">"Microsoft.AspNetCore"</span>: <span class="hljs-string">"Warning"</span>
+    }
+  },
+  <span class="hljs-string">"AllowedHosts"</span>: <span class="hljs-string">"*"</span>
+}
+</div></code></pre>
+<p>Your database name will use the pattern <code>aspnet-[ProjectName]-[GUID]</code> and have a different GUID value from the example above.</p>
+<p>At a command prompt or terminal, in the <code>Northwind.Mvc</code> folder, enter the command to run database migrations so that the database used to store credentials for authentication is created, as shown in the following command:
+dotnet ef database update</p>
+<pre class="hljs"><code><div>    dotnet ef database update
+</div></code></pre>
+<p>Note the database is created with tables like <code>AspNetRoles</code>.</p>
+<p>If you get an error because SQL Server LocalDB is not installed, you can install it manually using the instructions at the following link: <a href="https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb">Microsoft SQL Server localdb</a>.</p>
+<h3 id="changing-the-port-numbers-and-starting-the-website">Changing the port numbers and starting the website</h3>
+<p>By default, the project template assigns random port numbers to host the website. The port numbers could conflict with other port numbers used on your computer, so it is good practice to manually set them.</p>
+<p>Let’s review the behavior of the default ASP.NET Core MVC website project template:</p>
+<p>In the <code>Northwind.Mvc</code> project, expand the <code>Properties</code> folder and open the file named <code>launchSettings.json</code>, and note the profiles named <strong>http</strong> and <strong>https</strong>. They have randomly assigned port numbers that you will change.</p>
+<p>The <code>launchSettings.json</code> file is only for use during development. It has no effect on the build process. It is not deployed with the compiled website project, so it has no effect on the production runtime. It is only processed by code editors like Visual Studio to set up environment variables and define URLs for the web server to listen on when the project is started by a code editor.</p>
+<p>In <code>launchSettings.json</code>, change the configured port numbers for the <code>https</code> profile.</p>
+<pre class="hljs"><code><div><span class="hljs-string">"applicationUrl"</span>: <span class="hljs-string">"https://localhost:5021;http://localhost:5020"</span>,
+</div></code></pre>
+<p><strong>Note:</strong> the order of URLs in this setting is important. The first URL will be used by default, and the second only used as a fallback.</p>
+<p>Start the Northwind.Mvc website using the https launch profile:</p>
+<p>If you are using Visual Studio, in the toolbar, select the https profile, select Google Chrome as the Web Browser, and then start the project without debugging.</p>
+<h2 id="reviewing-an-mvc-website-project-structure">Reviewing an MVC website project structure</h2>
+<p>In your code editor, in Visual Studio <strong>Solution Explorer</strong> (toggle on <strong>Show All Files</strong>) hover your mouse in the <strong>Solution</strong> pane, click the eyeball icon, and then review the structure of an MVC website project. We will look in more detail at some of these parts later.</p>
+<p><img src="assets/images/solution-explorer.jpg" alt="Solution Explorer file structure" title="Solution Explorer file structure"></p>
+<p><code>Properties</code>: This folder contains a configuration file for Internet Information Services (IIS) or IIS Express on Windows and for launching the website during development named <code>launchSettings.json</code>. This file is only used on the local development machine and is not deployed to your production website.</p>
+<p><code>wwwroot</code>: This folder contains static content used by the website. For example, you should put images and other static file resources like PDF documents here or in a subfolder.</p>
+<ul>
+<li><code>css</code>: This folder contains a stylesheet for the website project.</li>
+<li><code>js</code>: This folder contains a JavaScript file for the website project.</li>
+<li><code>lib</code>: This folder contains client-side libraries like Bootstrap and jQuery.</li>
+<li><code>favicon.ico</code>: This file is shown on tabs by browsers.</li>
+</ul>
+<p><code>Areas</code>: This folder contains nested folders and a file needed to integrate your website project with <strong>ASP.NET Core Identity</strong>, which is used for authentication.</p>
+<p><code>Controllers</code>: This folder contains C# classes that have methods (known as actions) that fetch a model and pass it to a view, for example, <code>HomeController.cs</code>.</p>
+<p><code>Data</code>: This folder contains Entity Framework Core (EF Core) migration classes used by the ASP.NET Core Identity system to provide data storage for authentication and authorization, for example, <code>ApplicationDbContext.cs</code>.</p>
+<p><code>Models</code>: This folder contains C# classes that represent all of the data gathered together by a controller and passed to a view, for example, <code>ErrorViewModel.cs</code>.</p>
+<p><code>Views</code>: This folder contains the <code>.cshtml</code> Razor files that combine HTML and C# code to dynamically generate HTML responses:</p>
+<ul>
+<li><code>Home</code>: This subfolder contains Razor files for the home and privacy pages.</li>
+<li><code>Shared</code>: This subfolder contains Razor files for the shared layout, an error page, and two partial views for logging in and * validation scripts.</li>
+<li><code>_ViewImports</code>: This file imports common namespaces used in all views like Tag Helpers.</li>
+<li><code>_ViewStart</code>: This file sets the default layout.</li>
+</ul>
+<p><code>app.db</code>: This is the <code>SQLite</code> database that stores registered visitors. (If you used SQL Server LocalDB, then it will not be needed).</p>
+<p><code>appsettings.json</code> and <code>appsettings.Development.json</code>: These files contain settings that your website can load at runtime, for example, the database connection string for the ASP.NET Core Identity system and logging levels. These settings can be overridden by other mechanisms like environment variables, application secrets, and command-line arguments.</p>
+<p><code>Northwind.Mvc.csproj</code>: This file contains project settings like the use of the web .NET SDK, an entry for SQLite to ensure that the app.db file is copied to the website’s output folder, and a list of NuGet packages that your project requires, including EF Core and ASP.NET Core Identity packages. To edit it with Visual Studio, double-click the project name.</p>
+<p><code>Northwind.Mvc.csproj.user</code>: This file contains Visual Studio session settings for remembering options. For example, which launch profile was selected, like https. Visual Studio hides this file, and it should not normally be included in source code control because it is specific to an individual developer.</p>
+<p><code>Program.cs</code>: This file defines a hidden <code>Program</code> class that contains the <code>&lt;Main&gt;$</code> entry point. It builds a pipeline for processing incoming HTTP requests and hosts the website using default options like configuring the Kestrel web server and loading <code>appsettings</code>. It adds and configures services that your website needs, for example, ASP.NET Core Identity for authentication, SQLite or SQL Server for identity data storage, and so on, and routes for your application.</p>
+<h2 id="reviewing-the-aspnet-core-identity-database">Reviewing the ASP.NET Core Identity database</h2>
+<p>When creating the ASP.NET Core MVC website project, if you choose to enable authentication using individual accounts, then you need a database to store the user accounts, including emails and passwords. This could be a local SQLite database file or a SQL Server database. By default, the SQL Server database will use SQL Server LocalDB as the database server, but you can configure the database connection string to use a remote or cloud SQL Server instead.</p>
+<p><strong>Good Practice</strong>: Most ASP.NET Core MVC projects need to connect to other databases too. For example, our project connects to the <code>Northwind</code> database. Although, by default, the tables needed by ASP.NET Core Identity are stored in their own database, you could add those tables to an existing database like Northwind. This could simplify deployments by having a single database for everything needed by the MVC project, instead of multiple separate databases.</p>
+<p>Open <code>appsettings.json</code> to find the connection string used for the ASP.NET Core Identity database, as shown highlighted for SQL Server LocalDB in the following markup:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-string">"ConnectionStrings"</span>: {
+    <span class="hljs-string">"DefaultConnection"</span>: <span class="hljs-string">"Server=(localdb)\\mssqllocaldb;Database=aspnet-Northwind.Mvc-2F6A1E12-F9CF-480C-987D-FEFB4827DE22;Trusted_Connection=True;MultipleActiveResultSets=true"</span>
+  },
+  <span class="hljs-string">"Logging"</span>: {
+    <span class="hljs-string">"LogLevel"</span>: {
+      <span class="hljs-string">"Default"</span>: <span class="hljs-string">"Information"</span>,
+      <span class="hljs-string">"Microsoft.AspNetCore"</span>: <span class="hljs-string">"Warning"</span>
+    }
+  },
+  <span class="hljs-string">"AllowedHosts"</span>: <span class="hljs-string">"*"</span>
+}
+</div></code></pre>
+<p>If you used SQL Server LocalDB for the identity data store, then you can use <strong>Server Explorer</strong> to connect to the database. You can copy and paste the connection string from the <code>appsettings.json</code> file. Remember to remove the second backslash between (<code>localdb</code>) and <code>mssqllocaldb</code>.</p>
+<blockquote>
+<p>aspnet-Northwind.Mvc-de5b8d37-cc66-46b9-bfcd-82e878fc2634</p>
+</blockquote>
+<p><img src="assets/images/aspnet-users.jpg" alt="ASP.Net Users table" title="ASP.Net Users table"></p>
+<h2 id="configuring-files-included-in-an-aspnet-core-project">Configuring files included in an ASP.NET Core project</h2>
+<p>Until now, most of our projects have been simple console apps and class libraries with a few C# class files. By default, when we compiled those projects, all <code>.cs</code> files in the project folder or subfolders were automatically included in the build at compile time.</p>
+<p>ASP.NET Core projects get more complicated. There are many more file types; some of them can be compiled at runtime instead of compile time, and some of them are just content that does not need to be compiled but does need to be deployed along with the compiled assemblies.</p>
+<p>You can control how files are processed during a build, and which are included or excluded from a deployment, by putting elements in the project file. These are processed by <strong>MS Build</strong> and other tools during builds and deployments.</p>
+<p>You declare items in the project file as child elements of an <code>&lt;ItemGroup&gt;</code> element. For example:</p>
+<pre class="hljs"><code><div>&lt;--Include the greet.proto file <span class="hljs-keyword">in</span> the build process.--&gt;
+&lt;ItemGroup&gt;
+  &lt;Protobuf Include=<span class="hljs-string">"Protos\greet.proto"</span> GrpcServices=<span class="hljs-string">"Server"</span> /&gt;
+&lt;/ItemGroup&gt;
+&lt;--Remove the stylecop.json file from the build process.--&gt;
+&lt;ItemGroup&gt;
+  &lt;None Remove=<span class="hljs-string">"stylecop.json"</span> /&gt;
+&lt;/ItemGroup&gt;
+&lt;--Include the stylecop.json file <span class="hljs-keyword">in</span> the deployment.--&gt;
+&lt;ItemGroup&gt;
+  &lt;AdditionalFiles Include=<span class="hljs-string">"stylecop.json"</span> /&gt;
+&lt;/ItemGroup&gt;
+</div></code></pre>
+<p>You can have as many <code>&lt;ItemGroup&gt;</code> elements as you want, so it is good practice to use them to logically divide elements by type. They are merged automatically by build tools.</p>
+<p>Usually, you manually add these elements when you know you need to use them, but unfortunately, Visual Studio and other code editors sometimes mess things up by trying to be helpful.</p>
+<p>For example, you might have added a new Razor Page file in the <code>Pages</code> folder named <code>index.cshtml</code>. You start the web server, but the page does not appear. Or, you are working on a <code>GraphQL</code> service, and you add a file named <code>seafoodProducts.graphql</code>. But when you run the GraphQL tool to auto-generate client-side proxies, it fails.</p>
+<p>These are both common indications that your code editor has decided that the new file should not be part of the project. It has automatically added an element to the project file to remove the file from the build process without telling you.</p>
+<p>To solve this type of problem, review the project file for unexpected entries, like the following, and delete them:</p>
+<pre class="hljs"><code><div>  &lt;ItemGroup&gt;
+    &lt;Content Remove=<span class="hljs-string">"Pages\index.cshtml"</span> /&gt;
+  &lt;/ItemGroup&gt;
+  &lt;ItemGroup&gt;
+    &lt;GraphQL Remove=<span class="hljs-string">"seafoodProducts.graphql"</span> /&gt;
+  &lt;/ItemGroup&gt;
+</div></code></pre>
+<p><strong>Good Practice</strong>: When using tools that automatically “fix” problems without telling you, review your project file for unexpected elements when unexpected results happen.</p>
+<p><strong>More information</strong>: You can read more about managing MS Build items at the following link: <a href="https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-items">MS Build documentation</a>.</p>
+<h2 id="exploring-an-aspnet-core-mvc-website">Exploring an ASP.NET Core MVC website</h2>
+<h3 id="aspnet-core-mvc-initialization">ASP.NET Core MVC initialization</h3>
+<p>Appropriately enough, we will start by exploring the MVC website’s default initialization and configuration:</p>
+<p><strong>1.</strong> In <code>Program.cs</code>, note that it can be divided into four important sections from top to bottom. As you review the sections, you might want to add regions and comments to remind yourself of what each section is used for.</p>
+<p><strong>2.</strong> The first section imports some namespaces, as shown in the following code.</p>
+<pre class="hljs"><code><div>  using Microsoft.AspNetCore.Identity; // To use IdentityUser.
+  using Microsoft.EntityFrameworkCore; // To use UseSqlServer method.
+  using Northwind.Mvc.Data; // To use ApplicationDbContext.
+</div></code></pre>
+<p>Remember that, by default, many other namespaces are imported using the implicit usings feature of .NET 6 and later. Build the project and then the globally imported namespaces can be found in the following file: <code>obj\Debug\net9.0\Northwind.Mvc.GlobalUsings.g.cs</code>.</p>
+<p><strong>3.</strong> The second section creates and configures a web host builder that does the following:</p>
+<ul>
+<li>It registers an application database context using SQL Server or SQLite. The database connection string is loaded from the  appsettings.json file.</li>
+<li>It adds ASP.NET Core Identity for authentication and configures it to use the application database.</li>
+<li>It adds support for MVC controllers with views, as shown in the following code:</li>
+</ul>
+<pre class="hljs"><code><div>  <span class="hljs-comment">#region Configure the host web server including services.</span>
+  var builder = WebApplication.CreateBuilder(args);
+  // Add services to the container.
+  var connectionString = builder.Configuration
+    .GetConnectionString(<span class="hljs-string">"DefaultConnection"</span>) ??
+      throw new InvalidOperationException(<span class="hljs-string">"Connection string 'DefaultConnection' not found."</span>);
+
+  builder.Services.AddDbContext&lt;ApplicationDbContext&gt;(options =&gt; options.UseSqlServer(connectionString));
+
+  builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+  builder.Services.AddDefaultIdentity&lt;IdentityUser&gt;(options =&gt; options.SignIn.RequireConfirmedAccount = <span class="hljs-literal">true</span>)
+    .AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();
+
+  builder.Services.AddControllersWithViews();
+
+  var app = builder.Build();
+  <span class="hljs-comment">#endregion</span>
+</div></code></pre>
+<p><strong>4.</strong> Note the builder object has two commonly used objects, Configuration and Services:</p>
+<ul>
+<li><code>Configuration</code> contains merged values from all the places you could set configuration: <code>appsettings.json</code>, environment variables, command-line arguments, and so on.</li>
+<li><code>Services</code> is a collection of registered dependency services.</li>
+</ul>
+<p>The call to <code>AddDbContext</code> is an example of registering a dependency service.ASP.NET Core implements the <strong>dependency injection (DI)</strong> design pattern so that other components like controllers can request needed services through their constructors. Developers register those services in this section of <code>Program.cs</code>.</p>
+<p><strong>5.</strong> The third section configures the HTTP pipeline through which requests and responses flow in and out. It configures a relative URL path to run database migrations if the website runs in development, or a friendlier error page and <strong>HTTP Strict Transport Security (HSTS)</strong> for production. HTTPS redirection, static files, routing, and ASP.NET Identity are enabled, and an MVC default route and Razor Pages are configured, as shown in the following code:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">#region Configure the HTTP request pipeline.</span>
+<span class="hljs-keyword">if</span> (app.Environment.IsDevelopment())
+{
+  app.UseMigrationsEndPoint();
+}
+<span class="hljs-keyword">else</span>
+{
+  app.UseExceptionHandler(<span class="hljs-string">"/Home/Error"</span>);
+  // The default HSTS value is 30 days. You may want to change this <span class="hljs-keyword">for</span> production scenarios, see https://aka.ms/aspnetcore-hsts.
+  app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthorization();
+app.MapStaticAssets();
+
+app.MapControllerRoute(
+  name: <span class="hljs-string">"default"</span>,
+  pattern: <span class="hljs-string">"{controller=Home}/{action=Index}/{id?}"</span>)
+  .WithStaticAssets();
+
+app.MapRazorPages()
+  .WithStaticAssets();
+<span class="hljs-comment">#endregion</span>
+</div></code></pre>
+<p>Note the following about the preceding code:</p>
+<ul>
+<li>The <code>MapStaticAssets</code> and <code>WithStaticAssets</code> methods were introduced with .NET 9. They compress static assets in the <code>wwwroot</code> folder and allow MVC and Razor Pages to reference the optimized assets.</li>
+<li>Arguably the most important method in this section of <code>Program.cs</code> is <code>MapControllerRoute</code>, which maps a default route for use by MVC. This route is very flexible because it will map to almost any incoming URL, as you will see in the next topic.</li>
+<li>Although we will not create any Razor Pages in this book, we need to leave the method call that maps Razor Page support because our MVC website uses ASP.NET Core Identity for authentication and authorization, and that uses a Razor class library containing Razor Pages for its UI components, like visitor registration and login.</li>
+<li>The fourth and final section has a thread-blocking method call that runs the website and waits for incoming HTTP requests to respond to, as shown in the following code:</li>
+</ul>
+<pre class="hljs"><code><div>  <span class="hljs-comment">#region Start the host web server listening for HTTP requests.</span>
+  app.Run(); // This is a blocking call.
+  <span class="hljs-comment">#endregion</span>
+</div></code></pre>
+<h3 id="what-does-usemigrationsendpoint-do">What does UseMigrationsEndPoint do?</h3>
+
+</body>
+</html>
